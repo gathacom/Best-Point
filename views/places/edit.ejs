@@ -1,0 +1,44 @@
+<% layout('layouts/app') %>
+
+<h1 class="text-center">Edit Place</h1>
+<div class="offset-3 col-7 mb-5">
+<form action="/places/<%= place._id %>?_method=PUT" method="POST" class="validated-form" novalidate>
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="place[title]" id="title" class="form-control" value="<%= place.title %>" required/>
+        <div class="invalid-feedback">
+          Please input the Title.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" name="place[location]" id="location" class="form-control" value="<%= place.location %> " required/>
+        <div class="invalid-feedback">
+          Please input the Location.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="text" name="place[price]" id="price" class="form-control" value="<%= place.price %>" required/>
+        <div class="invalid-feedback">
+          Please input the Price.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="desciption" class="form-label">Description</label>
+        <textarea type="text" name="place[description]" id="desciption" class="form-control" required><%= place.description  %></textarea>
+        <div class="invalid-feedback">
+          Please input the Description.
+        </div>
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input type="text" name="place[image]" id="image" class="form-control" value="<%= place.image %>" required/>
+          <div class="invalid-feedback">
+            Please input the Image url.
+          </div>
+        </div>
+  <button type="submit" class="btn btn-warning w-25 ">Edit</button>
+</form>
+</div>
+

@@ -1,0 +1,57 @@
+<% layout('layouts/app') %>
+
+<div class="row my-5 mx-auto">
+    <div class="m-auto col-6">
+        <div class=" d-flex flex-column col-10">
+            <img src="<%= place.image %>" alt="" class="me-3 rounded-3 " max-height: 20rem">
+            <div class="mt-5">
+                <h1 class=""><%= place.title %> </h1>
+                <p><strong><%= place.location %></strong> </p>
+                <p class="w"><%= place.description %> </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 overflow-y-scroll" style="max-height:100vh">
+        <h3>Leave a review</h3>
+        <form action="/places/<%= place._id %>/reviews" method="POST" class="validated-form" novalidate>
+            <div class="mb-3">
+                <label for="rating">
+                    <input type="range" name="review[rating]" id="rating" class="form-range" min="1" max="5">
+                </label>
+            </div>
+            <div class="mb-3">
+                <label for="comment">
+                    <textarea name="review[comment]" id="comment" class="form-control" cols="40" rows="5" required></textarea>
+                </label>
+            </div>
+            <div class="invalid-feedback">
+                Please input the review.
+              </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+        <hr>
+        <h3>Reviews</h3>
+        <div class="h-50">
+            <% for(const review of place.reviews){ %>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= review.rating %></h4>
+                        <div class="card-text"><%= review.comment %></div>
+                    </div>
+                    <form action="/places/<%= place._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger m-1 p-1 col-3">Delete</button>
+                    </form>
+                </div>
+                <% } %>
+        </div>
+    </div>
+    
+</div>
+
+<div class="d-flex flex-row m-4">
+    <a href="/places/<%= place._id %>/edit" class="btn btn-warning me-4">Edit</a>
+    <form action="/places/<%= place._id %>?_method=DELETE" method="POST">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>
+

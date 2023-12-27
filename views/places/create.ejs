@@ -1,0 +1,43 @@
+<% layout('layouts/app') %>
+
+<h1 class="text-center">Add New Place</h1>
+<div class="d-flex justify-content-center mb-5">
+    <form action="/places" method="POST" class="validated-form col-6" novalidate>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="place[title]" id="title" class="form-control" required/>
+        <div class="invalid-feedback">
+          Please input the title.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" name="place[location]" id="location" class="form-control" required/>
+        <div class="invalid-feedback">
+          Please input the Location.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="text" name="place[price]" id="price" class="form-control" required/>
+        <div class="invalid-feedback">
+          Please input the Price.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea type="text" name="place[description]" id="description" class="form-control" required></textarea>
+        <div class="invalid-feedback">
+          Please input the Description.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Image URL</label>
+        <input type="text" name="place[image]" id="image" class="form-control" required/>
+        <div class="invalid-feedback">
+          Please input the Image url.
+        </div>
+        </div>
+        <button type="submit" class="btn btn-warning w-25 ">Add</button>
+    </form>
+</div>
