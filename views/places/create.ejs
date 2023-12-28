@@ -2,24 +2,33 @@
 
 <h1 class="text-center">Add New Place</h1>
 <div class="d-flex justify-content-center mb-5">
-    <form action="/places" method="POST" class="validated-form col-6" novalidate>
+    <form action="/places" method="POST" class="validated-form col-6" enctype="multipart/form-data" novalidate>
       <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
+        <label for="title" class="form-label">Place Name</label>
         <input type="text" name="place[title]" id="title" class="form-control" required/>
         <div class="invalid-feedback">
           Please input the title.
         </div>
       </div>
-      <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input type="text" name="place[location]" id="location" class="form-control" required/>
-        <div class="invalid-feedback">
-          Please input the Location.
+      <div class="mb-3 d-flex justify-content-between">
+        <div class="col-7">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" name="place[city]" id="city" class="form-control" placeholder="eg. North Jakarta, DKI Jakarta" required/>
+          <div class="invalid-feedback">
+            Please input the Location.
+          </div>
+        </div>
+        <div class="col-4">
+          <label for="country" class="form-label">Country</label>
+          <input type="text" name="place[country]" id="country" class="form-control" placeholder="eg. Indonesia" required/>
+          <div class="invalid-feedback">
+            Please input the Country.
+          </div>
         </div>
       </div>
       <div class="mb-3">
         <label for="price" class="form-label">Price</label>
-        <input type="text" name="place[price]" id="price" class="form-control" required/>
+        <input type="text" name="place[price]" id="price" class="form-control" placeholder="eg. 100" required/>
         <div class="invalid-feedback">
           Please input the Price.
         </div>
@@ -32,8 +41,8 @@
         </div>
       </div>
       <div class="mb-3">
-        <label for="image" class="form-label">Image URL</label>
-        <input type="text" name="place[image]" id="image" class="form-control" required/>
+        <label for="formFileMultiple" class="form-label">Images</label>
+        <input type="file" name="image" class="form-control" id="formFileMultiple" accept="image/*" multiple required>
         <div class="invalid-feedback">
           Please input the Image url.
         </div>

@@ -7,7 +7,27 @@ const placeSchema = new Schema({
     price: Number,
     description: String,
     location: String,
-    image: String,
+    geometry:{
+        type: {
+            type: String, // Don't do `{ location: { type: String } }`
+            enum: ['Point'], // 'location.type' must be 'Point'
+            required: true
+          },
+          coordinates: {
+            type: [Number],
+            required: true
+          }
+    },
+    images: [
+        {
+            url : String,
+            filename: String,
+        }
+    ],
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    },
     reviews:[{
         type: Schema.Types.ObjectId,
         ref: 'Review'

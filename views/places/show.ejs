@@ -1,27 +1,74 @@
 <% layout('layouts/app') %>
+<link rel="stylesheet" href="/css/stars.css">
 
-<div class="row my-5 mx-auto">
-    <div class="m-auto col-6">
-        <div class=" d-flex flex-column col-10">
-            <img src="<%= place.image %>" alt="" class="me-3 rounded-3 " max-height: 20rem">
+<div class="row my-5 mx-auto" style="min-height: 160vh">
+    <div class="mx-auto col-6">
+        <div class=" d-flex flex-column col-12">
+            <div id="carouselExampleInterval" class="carousel slide h-100" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                <% place.images.forEach((image, index) => { %>
+                  <div class="carousel-item <%= index === 0 ? 'active' : '' %>" >
+                    <div class="w-100">
+                    <img src="/images/<%= image.filename %>" class="place-image d-block rounded-4" 
+                    style="
+                        width: inherit;
+                        height: inherit;
+                        object-fit: fill;">
+                  </div>
+                  </div>
+                <% }) %>
+                </div>
+                <% if (place.images.length > 1){ %>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+                <% } %>
+              </div>
+            <!-- <img src="/images/" alt="" class="me-3 rounded-3 " style="max-height: 20rem"> -->
             <div class="mt-5">
                 <h1 class=""><%= place.title %> </h1>
-                <p><strong><%= place.location %></strong> </p>
+                <p><strong><%= place.location %></strong></p>
+                <p class="w">Author : <%= place.author.username %></p>
                 <p class="w"><%= place.description %> </p>
+                <% if (currentUser && place.author.equals(currentUser._id)) {%>
+                    <div class="d-flex flex-row m-4">
+                        <a href="/places/<%= place._id %>/edit" class="btn btn-warning me-4">Edit</a>
+                        <form action="/places/<%= place._id %>?_method=DELETE" method="POST">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                    <% } %>
             </div>
         </div>
     </div>
-    <div class="col-4 overflow-y-scroll" style="max-height:100vh">
+    <div class="col-4" style="height:100vh">
+        <div style="width: 640px; height: 480px; margin-bottom: 5%;" id="mapContainer"></div>
         <h3>Leave a review</h3>
         <form action="/places/<%= place._id %>/reviews" method="POST" class="validated-form" novalidate>
-            <div class="mb-3">
-                <label for="rating">
-                    <input type="range" name="review[rating]" id="rating" class="form-range" min="1" max="5">
-                </label>
+            <div class="mb-1">
+                <legend>Rating</legend>
+                    <fieldset class="starability-basic">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
             </div>
             <div class="mb-3">
                 <label for="comment">
-                    <textarea name="review[comment]" id="comment" class="form-control" cols="40" rows="5" required></textarea>
+                    <textarea name="review[comment]" id="comment" class="form-control" placeholder="How is this place?" cols="40" rows="5" required></textarea>
                 </label>
             </div>
             <div class="invalid-feedback">
@@ -31,27 +78,49 @@
         </form>
         <hr>
         <h3>Reviews</h3>
-        <div class="h-50">
+        <div class="overflow-y-scroll" style="height: 90vh">
             <% for(const review of place.reviews){ %>
                 <div class="card mb-2">
                     <div class="card-body">
-                        <h4 class="card-title"><%= review.rating %></h4>
+                        <p class="starability-result" data-rating="<%= review.rating %>">
+                            Rated: <%= review.rating %> stars
+                        </p>
+                        <p class="card-title"><%= review.author.username %></p>
                         <div class="card-text"><%= review.comment %></div>
                     </div>
+                    <% if (currentUser && review.author.equals(currentUser._id)) {%>
                     <form action="/places/<%= place._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger m-1 p-1 col-3">Delete</button>
                     </form>
+                    <% } %>
                 </div>
                 <% } %>
         </div>
     </div>
-    
 </div>
 
-<div class="d-flex flex-row m-4">
-    <a href="/places/<%= place._id %>/edit" class="btn btn-warning me-4">Edit</a>
-    <form action="/places/<%= place._id %>?_method=DELETE" method="POST">
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
-</div>
+<script>
+    const place = <%- JSON.stringify(place) %>;
+    const placeCoordinate = {
+        lng: place.geometry.coordinates[0], lat: place.geometry.coordinates[1]
+    }
+</script>
+<script>
+    // Initialize the platform object
+    const platform = new H.service.Platform({
+      'apikey': 'MbWmSxzF2nBu6_SvkEdhe5plBeVM51FsEXIjGaD7xaE'
+    });
+
+    // Obtain the default map types from the platform object
+    const maptypes = platform.createDefaultLayers();
+
+    // Instantiate (and display) the map
+    const map = new H.Map(
+      document.getElementById('mapContainer'),
+      maptypes.vector.normal.map,
+      {
+        zoom: 10,
+        center: placeCoordinate
+      });
+  </script>
 

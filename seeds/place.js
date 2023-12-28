@@ -171,8 +171,14 @@ async function seedPlaces() {
     // }))
 
     try {
+        const newPlace = places.map(place =>{
+            return {...place, author: '658982d17507d6a86ea346fc', images:{
+                url : 'public\\images\\image-1703761623525-296957055.jpg',
+                filename : 'image-1703761623525-296957055.jpg'
+            }}
+        })
         await Place.deleteMany({});
-        await Place.insertMany(places);
+        await Place.insertMany(newPlace);
         console.log('Data berhasil disimpan');
     } catch (err) {
         console.log('Terjadi kesalahan saat menyimpan data:', err);
